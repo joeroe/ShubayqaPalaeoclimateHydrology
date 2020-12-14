@@ -1,0 +1,384 @@
+---
+title: "Modelling the hydrological potential of the eastern Jordanian qa"
+author: "Joe Roe"
+date: "`r Sys.Date()`"
+output:
+  bookdown::pdf_document2:
+    toc: false
+bibliography: badia_qa_hydrology.bib
+csl: quaternary-international.csl
+---
+
+```{r setup-knitr, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  include = FALSE
+)
+```
+
+```{r setup-dependences}
+# Install package dependencies not on CRAN:
+# remotes::install_github("giswqs/whiteboxR")
+# whitebox::wbt_init()
+
+library("tidyverse")
+library("sf")
+library("stars")
+library("whitebox")
+library("fs")
+library("here")
+library("rcartocolor")
+library("ggspatial")
+library("gt")
+library("patchwork")
+library("ggrepel")
+```
+
+This document describes a simple hydrological model of three qa (Shubayqa, Qattafi and Wisad) in the eastern Jordanian Badia.
+It has three components:
+
+1. A delineation of the extent of the basins (watersheds) of each qa based on topographic flow analysis
+2. Palaeoclimatic reconstructions of the annual precipitation across each of these basins in key periods
+3. A simple water balance model used to estimate effective precipitation and by extension the potential volume of water collected in each qa
+
+All three components were implemented in R.
+A reproducible research compendium containing the data and code used to perform this analysis, and generate this document, is available at: <https://github.com/joeroe/badia_qa_hydrology>
+
+```{r vars}
+data_raw <- path(here(), "analysis", "data", "raw_data")
+data_drv <- path(here(), "analysis", "data", "derived_data")
+
+crs_unproj <- 4326
+crs_proj <- 32637
+```
+
+# Basin delineation
+
+To delineate the basins of each qa, we constructed a hydrological model using WhiteboxTools version 1.4.0 [@Lindsay2016].
+
+```{r data-qa}
+st_read(path(data_raw, "badia_qa.gpkg"), layer = "badia_qa") %>% 
+  st_transform(qa, crs = crs_proj) %>% 
+  mutate(qa = factor(qa, c("Shubayqa", "Qattafi", "Wisad"))) %>% 
+  mutate(centroid = st_centroid(geometry)) ->
+  qa
+```
+
+The starting point was a digital elevation model (DEM) covering the eastern Jordanian *Badia*, extracted from NASADEM 1 arc-second, void-filled global topographic data [@Nasa_jpl2020] and reprojected to UTM zone 37 N.
+To prepare the DEM for hydrological modelling, we applied the following standard preprocessing steps:
+
+* Smoothing with Sun et al.'s feature-preserving denoising algorithm [@Sun2007; @Stevenson2010]. 
+* Flattening of the area under the three qa under study to a constant elevation
+* Filling closed depressions to ensure flow across the entire study region
+
+```{r data-dem}
+# UNCOMMENT THE FOLLOWING IF DERIVED DATA IS NOT AVAILABLE
+# Reproject
+# dem <- read_stars(path(data_raw, "NASADEM_HGT_badia.tif"))
+# dem_frame <- st_sf(st_as_sfc(st_bbox(dem)), crs = crs_unproj)
+# dem <- st_warp(dem, crs = crs_proj)
+# dem_frame <- st_transform(dem_frame, crs = crs_proj)
+# write_stars(dem, path(data_drv, "dem1_utm.tif"))
+
+# Smoothing
+# wbt_feature_preserving_smoothing(path(data_drv, "dem1_utm.tif"),
+#                                  path(data_drv, "dem2_smoothed.tif"))
+
+# Depression breaching/filling
+# wbt_fill_depressions(path(data_drv, "dem2_smoothed.tif"),
+#                      path(data_drv, "dem3_filled.tif"))
+
+# Lake flattening
+# qa_shp <- file_temp(ext = "shp")
+# write_sf(qa, qa_shp)
+# wbt_flatten_lakes(dem = path(data_drv, "dem3_filled.tif"),
+#                   lakes = qa_shp,
+#                   output = path(data_drv, "dem_processed.tif"))
+
+# Read back result for plotting
+dem <- read_stars(path(data_drv, "dem_processed.tif"))
+dem_lowres <- st_warp(dem, crs = crs_proj, cellsize = 150)
+dem_frame <- st_sf(st_as_sfc(st_bbox(dem)), crs = crs_proj)
+```
+
+We traced the visible extent of the modern qa beds from satellite imagery in Google Earth.
+Since the DEM was preprocessed to flatten these areas, we can consider the centroid of each qa to be its outlet point for the purposes of the hydrological model.
+We then estimated the upslope watersheds of each of these outlet points using the 'simple D8' flow direction algorithm [@OCallaghan1984].
+The results are shown in figure \@ref(fig:basin-plot).
+
+```{r qa-watershed}
+# UNCOMMENT THE FOLLOWING IF DERIVED DATA IS NOT AVAILABLE
+# Prepare qa raster
+# qa_shp <- file_temp(ext = "shp")
+# st_write(mutate(qa, qa = as.integer(qa)), qa_shp)
+# wbt_vector_polygons_to_raster(input = qa_shp,
+#                               output = path(data_drv, "qa.tif"),
+#                               field = "qa",
+#                               base = path(data_drv, "dem_processed.tif"))
+
+# Calculate flow direction
+# wbt_d8_pointer(dem = path(data_drv, "dem_processed.tif"),
+#                output = path(data_drv, "d8.tif"))
+
+# Calculate watersheds
+# wbt_watershed(d8_pntr = path(data_drv, "d8.tif"),
+#               pour_pts = path(data_drv, "qa.tif"),
+#               output = path(data_drv, "basin.tif"))
+
+# Vectorise and read both back in for plotting
+# basin_rast <- read_stars(path(data_drv, "basin.tif"))
+# wbt_raster_to_vector_polygons(path(data_drv, "basin.tif"),
+#                               path(data_drv, "basin.shp"))
+st_read(path(data_drv, "basin.shp")) %>% 
+  as_tibble() %>% 
+  transmute(qa = levels(qa$qa)[VALUE], basin = geometry) %>% 
+  left_join(qa, by = "qa") ->
+  qa
+```
+
+```{r basin-plot, include=TRUE, fig.cap='Processed DEM with delineated basins of the qa'}
+ggplot() +
+  geom_stars(data = dem_lowres) +
+  geom_sf(data = dem_frame, colour = "black", fill = NA) +
+  geom_sf(data = st_set_geometry(qa, "basin"), colour = "black", fill = NA) +
+  geom_sf_text(data = st_set_geometry(qa, "centroid"), aes(label = qa)) +
+  scale_fill_carto_c(type = "diverging", palette = "Earth", 
+                     na.value = "transparent",
+                     name = "Elevation (m a.s.l)") +
+  annotation_scale(location = "br") +
+  labs(x = NULL, y = NULL) +
+  coord_sf() +
+  fixed_plot_aspect() +
+  theme_minimal() +
+  NULL
+```
+
+## Basin characteristics
+
+```{r basin-summary}
+qa %>% 
+  mutate(qa_area = st_area(geometry),
+         basin_area = st_area(basin)) ->
+  qa
+```
+
+```{r basin-table, include=TRUE}
+qa %>% 
+  mutate(qa_area = as.numeric(qa_area) / 1e6,
+         basin_area = as.numeric(basin_area) / 1e6) %>% 
+  st_set_geometry("centroid") %>% 
+  st_transform(crs_unproj) %>% 
+  mutate(
+    x = st_coordinates(centroid)[,"X"],
+    y = st_coordinates(centroid)[,"Y"],
+    x = format(round(x, 2), nsmall = 2),
+    y = format(round(y, 2), nsmall = 2),
+    coordinates = paste0(y, "° N, ", x, "° E")
+  ) %>% 
+  as_tibble() %>% 
+  select(Qa = qa, Coordinates = coordinates, qa_area, basin_area) %>% 
+  gt() %>% 
+  cols_label(qa_area = "Bed area", basin_area = "Basin area") %>% 
+  cols_align("left", vars(Qa, Coordinates)) %>% 
+  cols_align("right", vars(qa_area, basin_area)) %>% 
+  fmt_number(vars(qa_area, basin_area), pattern = "{x} km²")
+```
+
+**Shubayqa** drains a large portion of the southeastern slopes of the well-watered Jebel Druze, via Wadi Rajil,
+as well as the western slopes of the Tulul al Ashaqif, primarily via Wadi Salma.
+It lies on the northern edge of the greater Azraq basin, into which Shubayqa drains via Wadi Rajil.
+It is unclear from printed maps and satellite imagery whether the drainage system to the north of the qa—Wadi al-Hashad—lies within the watershed of the Shubayqa/Azraq basin.
+Helms [@Helms1981, p. 146] connects it to Wadi Rajil via the Qa Shubayqa, but GIS-based flow direction analysis at multiple scales consistently shows it beyond the watershed, draining north.
+Given the relatively flat terrain and poorly developed drainage network of the *Badia* [@Allison2000], combined with the limited resolution of available DEMs, it is possible these models do not fully reflect the reality.
+It is also possible that the landforms have changed such that it is no longer connected but was in the past.
+If either are the case, the addition of the Wadi al-Hashad drainage would include a much of eastern foothills of the Jebel Druze within the Shubayqa basin.
+
+**Qattafi** and **Wisad** drain slightly larger areas, but in the drier interior of the *Badia*.
+They straddle the southern end of the Tulul al Ashaqif: 
+Qattafi on the eastern slope, in the Azraq basin; 
+Wisad on the western slope, in the Hammad basin.
+The wadi systems of these slopes channel a significant portion of the region's rainfall to qa like Qattafi and Wisad [@Al-Qudah2009, p. 605], though presumably at a lesser volume than the Jebel Druze.
+
+# Palaeoclimate
+
+We extracted reconstructed precipitation from downscaled global palaeoclimate simulations [@Fordham2017; @Brown2018] and recent historic climate data [@Karger2017].
+The data from PaleoClim includes the mean annual precipitation aggregated over the climate period (fig. \@ref(fig:paleoclim-map)).
+
+```{r data-paleoclim}
+# native stars version
+# paleoclim <- read_stars(dir_ls(path(data_raw, "paleoclim"), glob = "*.tif"))
+# periods <- str_extract(names(paleoclim), "[^_]+")
+# biovars <- str_extract(names(paleoclim), "bio_[0-9]+")
+
+tibble(
+  path = dir_ls(path(data_raw, "paleoclim"), glob = "*.tif"),
+  file = basename(path),
+  period = str_extract(file, "[^_]+"),
+  biovar = str_extract(file, "bio_[0-9]+"),
+  rast = map(path, raster::raster),
+  star = map(rast, st_as_stars)
+) %>% 
+  mutate(
+    period = factor(period, 
+                    levels = c("HS1", "BA", "YDS", "EH", "MH", "LH", "CHELSA"),
+                    labels = c("Heinrich 1", "Bølling-Allerød", "Younger Dryas",
+                               "Early Holocene", "Mid Holocene", "Late Holocene",
+                               "Present")),
+  ) ->
+  paleoclim
+```
+
+```{r paleoclim-map, include=TRUE, fig.asp=1, fig.cap='Paleoclimate reconstructions of the Badia'}
+paleoclim %>% 
+  filter(biovar %in% c("bio_12")) %>% 
+  mutate(rast = map(rast, raster::as.data.frame, xy = TRUE)) %>% 
+  mutate(rast = map(rast, set_names, nm = c("x", "y", "value"))) %>% 
+  unnest(rast) %>% 
+  ggplot(aes(x = x, y = y, z = value)) +
+  geom_contour_filled(breaks = c(0, 50, 100, 150, 200, 300, 400, 500)) +
+  scale_fill_carto_d(palette = "Teal") +
+  facet_wrap(vars(period), ncol = 3, strip.position = "top") +
+  labs(x = NULL, y = NULL, fill = "Annual precipitation (mm)") +
+  coord_sf(crs = crs_proj, expand = FALSE) +
+  fixed_plot_aspect() +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank()
+  )
+```
+
+We used this data to calculate the precipitation across each of the qa basins (fig. \@ref(fig:paleoclim-qa-summary-plot)).
+
+```{r paleoclim-qa}
+paleoclim %>% 
+  filter(biovar == "bio_12") %>% 
+  select(period, star) %>% 
+  mutate(star = map(star, st_warp, crs = crs_proj)) ->
+  paleoclim_subset
+
+qa %>% 
+  slice(rep(1:n(), each = nrow(paleoclim_subset))) %>% 
+  bind_cols(slice(paleoclim_subset, rep(1:n(), times = nrow(qa)))) %>% 
+  group_by(qa) %>% 
+  mutate(prec = map(star, `[`, basin)) %>% 
+  select(-star) %>% 
+  ungroup() ->
+  qa
+```
+
+```{r paleoclim-qa-summary}
+# Cell area in m^2
+paleoclim_res <- abs(st_dimensions(qa$prec[[1]])[["x"]]$delta * st_dimensions(qa$prec[[1]])[["y"]]$delta)
+
+qa %>% 
+  mutate(prec = map(prec, as.data.frame)) %>% 
+  mutate(prec = map(prec, set_names, nm = c("x", "y", "prec"))) %>% 
+  unnest(prec) %>% 
+  drop_na(prec) %>% 
+  group_by(period, qa) %>% 
+  summarise(
+    qa_area = first(qa_area),
+    basin_area = first(basin_area),
+    prec_avg = mean(prec),
+    prec_total = sum(prec), # i.e. mm across ncells
+    ncells = n(),
+    prec_volume = sum(prec * paleoclim_res) / 1000, # In m^3
+    .groups = "drop_last"
+  ) ->
+  qa_summary
+```
+
+```{r paleoclim-qa-summary-plot, include=TRUE, fig.asp=1, fig.cap='Reconstructed precipitation across the qa basins for key climate periods'}
+p_prec1 <- qa_summary %>% 
+  ggplot(aes(x = period, y = prec_avg, group = qa)) +
+  geom_line() +
+  geom_point() +
+  geom_text_repel(aes(label = qa), filter(qa_summary, period == "Present")) +
+  labs(x = NULL, y = "Mean annual precipitation (mm)") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+p_prec2 <- qa_summary %>% 
+  ggplot(aes(x = period, y = prec_volume / 1e6, group = qa)) +
+  geom_line() +
+  geom_point() +
+  geom_text_repel(aes(label = qa), filter(qa_summary, period == "Present")) +
+  labs(x = NULL, y = "Total precipitation (million m^3)") + 
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+p_prec1 / p_prec2
+```
+
+# Water availability
+
+Estimating the volume of this rainfall that actually reached the qa requires a water balance model.
+Unfortunately, there is practically no data available that could be used to constrain such a model in this region.
+As a first order of approximation, we therefore adopted the simple equation used by Whitehead et al. [-@Whitehead2008] for Jawa, defining effective precipitation ($P_E$, in mm) as:
+
+$$P_E = K(P-E)$$
+
+Where $P$ is total precipitation (mm), $E$ is rainfall lost to evapotranspiration (mm) and $K$ is the proportion of rainfall that enters the wadi system (allowing for infilitration).
+We also follow Whitehead et al. in estimating the values of the constants $K$ and $E$ at 0.03±0.01 and 30±20 mm respectively.
+Applying this model to the qa basins, we can estimate the volume of water that reached them in each climate period.
+
+To further estimate the volume potentially retained in the qa, we calculated the volume of the qa.
+To do this we assume they are an oblate hemispheroid, with the product of the major semi-axes ($a^2$) equal to the area of the modern qa bed, and the length of the minor semi-axis ($b$) equal to the minimum depth established by our sediment dating (see main Table 2).
+The volume is then:
+
+$$V=\frac{2}{3}\pi a^2 b$$
+
+```{r water-table, include=TRUE}
+tribble(
+  ~qa,        ~period,           ~depth,
+  "Qattafi",  "Heinrich 1",      0.95,
+  "Qattafi",  "Bølling-Allerød", 0.95,
+  "Qattafi",  "Younger Dryas",   0.95,
+  "Qattafi",  "Early Holocene",  0.95,
+  "Qattafi",  "Mid Holocene",    0.6,
+  "Qattafi",  "Late Holocene",   NA,
+  "Qattafi",  "Present",         NA,
+  "Wisad",    "Heinrich 1",      1.45,
+  "Wisad",    "Bølling-Allerød", 1.45,
+  "Wisad",    "Younger Dryas",   1.45,
+  "Wisad",    "Early Holocene",  0.65,
+  "Wisad",    "Mid Holocene",    0.65,
+  "Wisad",    "Late Holocene",   NA,
+  "Wisad",    "Present",         NA,
+  "Shubayqa", "Heinrich 1",      1.95,
+  "Shubayqa", "Bølling-Allerød", 1.95,
+  "Shubayqa", "Younger Dryas",   1.95,
+  "Shubayqa", "Early Holocene",  1.95,
+  "Shubayqa", "Mid Holocene",    1.37,
+  "Shubayqa", "Late Holocene",   1.15,
+  "Shubayqa", "Present",         NA
+) %>% 
+  right_join(qa_summary, by = c("qa", "period")) %>% 
+  # Water balance model
+  mutate(k = 0.03, k_error = 0.01, e = 30, e_error = 20,
+         eff_prec_low = (k - k_error) * (prec_total - ((e + e_error) * ncells)),
+         eff_prec_high = (k + k_error) * (prec_total - ((e - e_error) * ncells)),
+         eff_prec_volume_low = (eff_prec_low * paleoclim_res) / 1000,
+         eff_prec_volume_high = (eff_prec_high * paleoclim_res) / 1000) %>% 
+  # Qa volume & percentage filled
+  mutate(qa_volume = as.numeric((2/3 * pi * qa_area * depth)),
+         filled_low = eff_prec_volume_low / qa_volume,
+         filled_high = eff_prec_volume_high / qa_volume) %>% 
+  select(qa, period, depth, qa_volume, 
+         eff_prec_volume_low, eff_prec_volume_high,
+         filled_low, filled_high) %>% 
+  group_by(qa) %>% 
+  gt() %>% 
+  cols_label(period = "Period", depth = "Depth (m)", 
+             qa_volume = "Volume (m³)", 
+             eff_prec_volume_low = "Effective precipitation (m³)",
+             filled_low = "Volume filled") %>% 
+  cols_merge_range(vars(eff_prec_volume_low), vars(eff_prec_volume_high)) %>% 
+  cols_merge_range(vars(filled_low), vars(filled_high)) %>% 
+  fmt_percent(vars(filled_low, filled_high)) %>% 
+  fmt_missing(everything(), missing_text = "—")
+```
+
+# References
