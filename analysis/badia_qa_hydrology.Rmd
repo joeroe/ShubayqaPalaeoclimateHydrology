@@ -71,32 +71,51 @@ To prepare the DEM for hydrological modelling, we applied the following standard
 * Flattening of the area under the three qa under study to a constant elevation
 * Filling closed depressions to ensure flow across the entire study region
 
-```{r data-dem}
-# UNCOMMENT THE FOLLOWING IF DERIVED DATA IS NOT AVAILABLE
+```{r data-dem, eval=FALSE}
+# Generate derived elevation (if needed)
+# Extract DEM
+dem_archives <- dir_ls(path(data_raw, "nasadem"), glob = "*.zip")
+dem_tmp <- path_temp("dem")
+walk(dem_archives, unzip, exdir = dem_extracted)
+
+# Read and merge tiles
+dem <- st_mosaic(
+  dir_ls(dem_tmp, glob = "*.hgt"),
+  dst = path(data_drv, "nasadem_badia", ext = "tif")
+) |>
+  read_stars()
+
 # Reproject
-# dem <- read_stars(path(data_raw, "NASADEM_HGT_badia.tif"))
-# dem_frame <- st_sf(st_as_sfc(st_bbox(dem)), crs = crs_unproj)
-# dem <- st_warp(dem, crs = crs_proj)
-# dem_frame <- st_transform(dem_frame, crs = crs_proj)
-# write_stars(dem, path(data_drv, "dem1_utm.tif"))
+dem_frame <- st_sf(st_as_sfc(st_bbox(dem)), crs = crs_unproj)
+dem <- st_warp(dem, crs = crs_proj)
+dem_frame <- st_transform(dem_frame, crs = crs_proj)
+write_stars(dem, path(dem_tmp, "dem0_projected.tif"))
 
-# Smoothing
-# wbt_feature_preserving_smoothing(path(data_drv, "dem1_utm.tif"),
-#                                  path(data_drv, "dem2_smoothed.tif"))
+# Smooth
+wbt_feature_preserving_smoothing(
+  path(dem_tmp, "dem0_projected.tif"),
+  path(dem_tmp, "dem1_smoothed.tif")
+)
 
-# Depression breaching/filling
-# wbt_fill_depressions(path(data_drv, "dem2_smoothed.tif"),
-#                      path(data_drv, "dem3_filled.tif"))
+# Breach and fill depressions
+wbt_fill_depressions(
+  path(dem_tmp, "dem1_smoothed.tif"),
+  path(dem_tmp, "dem2_filled.tif")
+)
 
-# Lake flattening
-# qa_shp <- file_temp(ext = "shp")
-# write_sf(qa, qa_shp)
-# wbt_flatten_lakes(dem = path(data_drv, "dem3_filled.tif"),
-#                   lakes = qa_shp,
-#                   output = path(data_drv, "dem_processed.tif"))
+# Flatten qa'en
+qa_shp <- file_temp(ext = "shp")
+write_sf(qa, qa_shp)
+wbt_flatten_lakes(
+  dem = path(dem_tmp, "dem2_filled.tif"),
+  lakes = qa_shp,
+  output = path(data_drv, "nasadem_badia_processed.tif")
+)
+```
 
-# Read back result for plotting
-dem <- read_stars(path(data_drv, "dem_processed.tif"))
+```{r read-data-dem}
+# Read back cached files generated in data-dem
+dem <- read_stars(path(data_drv, "nasadem_badia_processed.tif"))
 dem_lowres <- st_warp(dem, crs = crs_proj, cellsize = 150)
 dem_frame <- st_sf(st_as_sfc(st_bbox(dem)), crs = crs_proj)
 ```
@@ -106,29 +125,41 @@ Since the DEM was preprocessed to flatten these areas, we can consider the centr
 We then estimated the upslope watersheds of each of these outlet points using the 'simple D8' flow direction algorithm [@OCallaghan1984].
 The results are shown in figure \@ref(fig:basin-plot).
 
-```{r qa-watershed}
-# UNCOMMENT THE FOLLOWING IF DERIVED DATA IS NOT AVAILABLE
+```{r data-basin, eval=FALSE}
+# Generate derived watershed data (if needed)
+basin_tmp <- dir_create(path_temp("basin"))
+
 # Prepare qa raster
-# qa_shp <- file_temp(ext = "shp")
-# st_write(mutate(qa, qa = as.integer(qa)), qa_shp)
-# wbt_vector_polygons_to_raster(input = qa_shp,
-#                               output = path(data_drv, "qa.tif"),
-#                               field = "qa",
-#                               base = path(data_drv, "dem_processed.tif"))
+qa_shp <- file_temp(ext = "shp", tmp_dir = basin_tmp)
+st_write(mutate(qa, qa = as.integer(qa)), qa_shp)
+wbt_vector_polygons_to_raster(
+  input = qa_shp,
+  output = path(basin_tmp, "qa.tif"),
+  field = "qa",
+  base = path(data_drv, "nasadem_badia_processed.tif")
+)
 
 # Calculate flow direction
-# wbt_d8_pointer(dem = path(data_drv, "dem_processed.tif"),
-#                output = path(data_drv, "d8.tif"))
+wbt_d8_pointer(
+  dem = path(data_drv, "nasadem_badia_processed.tif"),
+  output = path(basin_tmp, "d8.tif")
+)
 
 # Calculate watersheds
-# wbt_watershed(d8_pntr = path(data_drv, "d8.tif"),
-#               pour_pts = path(data_drv, "qa.tif"),
-#               output = path(data_drv, "basin.tif"))
+wbt_watershed(
+  d8_pntr = path(basin_tmp, "d8.tif"),
+  pour_pts = path(basin_tmp, "qa.tif"),
+  output = path(data_drv, "basin.tif")
+)
 
-# Vectorise and read both back in for plotting
-# basin_rast <- read_stars(path(data_drv, "basin.tif"))
-# wbt_raster_to_vector_polygons(path(data_drv, "basin.tif"),
-#                               path(data_drv, "basin.shp"))
+# Vectorise
+wbt_raster_to_vector_polygons(
+  path(data_drv, "basin.tif"),
+  path(data_drv, "basin.shp")
+)
+```
+
+```{r read-data-basin}
 st_read(path(data_drv, "basin.shp")) %>% 
   as_tibble() %>% 
   transmute(qa = levels(qa$qa)[VALUE], basin = geometry) %>% 
