@@ -2,7 +2,7 @@
 # Define study region, period, etc. and import radiocarbon dataset
 
 # Study region and period
-late_epipal_neo <- yr(c(15000, 5000), "BP")
+late_epipal_neo <- yr(c(18000, 8000), "BP")
 
 # Location of Shubayqa
 shub_location <- data.frame(

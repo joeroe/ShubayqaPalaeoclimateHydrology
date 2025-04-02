@@ -26,6 +26,7 @@ monthly_biovars = get_vars_for_dataset("CHELSA_trace21k_1.0_0.5m_vsi",
 # Requires patched pastclim, see https://github.com/EvolEcolGroup/pastclim/issues/66
 download_dataset("CHELSA_trace21k_1.0_0.5m_vsi", annual = FALSE, monthly = TRUE)
 
+# Note: very slow
 shub_climate_monthly <- location_series(
   shub_location, 
   # TODO: tidy up
