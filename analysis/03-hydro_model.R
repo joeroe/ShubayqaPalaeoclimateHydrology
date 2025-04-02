@@ -1,7 +1,3 @@
-library(dplyr)
-
-source(here("analysis", "data_pastclim.R"))
-
 # Evaporation from the qa surface (after Linacre 1992; Jones et al. 2007)
 # TODO: need monthly CHELSA data for temp_min and temp_max
 # Constants:

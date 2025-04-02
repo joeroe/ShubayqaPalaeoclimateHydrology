@@ -1,55 +1,55 @@
-site,lab_id,material,taxon,c14_age,c14_error,outlier,reference
-SHUB1,Beta-112146,dung,,12310,60,FALSE,RichterEtAl2017
-SHUB1,RTD-7317,tuber,Bolboschoenus sp.,12289,46,FALSE,RichterEtAl2017
-SHUB1,RTD-7318,wood charcoal,Zilla sp.,12332,46,FALSE,RichterEtAl2017
-SHUB1,RTD-7948,tuber,Bolboschoenus sp.,12478,38,FALSE,RichterEtAl2017
-SHUB1,RTD-7951,tuber,Bolboschoenus sp.,12166,55,FALSE,RichterEtAl2017
-SHUB1,RTD-7311,,Vitex sp.,12367,65,FALSE,RichterEtAl2017
-SHUB1,RTD-7312,,Zilla sp.,12405,50,FALSE,RichterEtAl2017
-SHUB1,RTD-7313,,Bolboschoenus sp.,12346,46,FALSE,RichterEtAl2017
-SHUB1,RTD-7314,,Bolboschoenus sp.,12273,48,FALSE,RichterEtAl2017
-SHUB1,RTD-7315,,Bolboschoenus sp.,12445,70,FALSE,RichterEtAl2017
-SHUB1,RTD-7316,,Zilla sp.,12337,46,FALSE,RichterEtAl2017
-SHUB1,RTD-7947,,Bolboschoenus sp.,12322,38,FALSE,RichterEtAl2017
-SHUB1,RTK-6818,,Fraxinus sp.,12477,76,FALSE,RichterEtAl2017
-SHUB1,RTK-6820,,Bolboschoenus sp.,12385,75,FALSE,RichterEtAl2017
-SHUB1,RTK-6821,,Hordeum spontaneum,12385,78,FALSE,RichterEtAl2017
-SHUB1,RTK-6822,wood charcoal,Tamarix sp.,12412,79,FALSE,RichterEtAl2017
-SHUB1,RTK-6823,wood charcoal,Tamarix sp.,12321,78,FALSE,RichterEtAl2017
-SHUB1,RTK-6813,,Tamarix sp.,12344,85,FALSE,RichterEtAl2017
-SHUB1,RTK-6816,,Tamarix sp.,12389,78,FALSE,RichterEtAl2017
-SHUB1,RTK-6819,,Bolboschoenus sp.,11325,74,FALSE,RichterEtAl2017
-SHUB1,RTK-6812,,Fraxinus sp.,11365,72,FALSE,RichterEtAl2017
-SHUB1,RTK-6817,,Chenopodiaceae,11322,75,FALSE,RichterEtAl2017
-SHUB1,RTD-8902,,Vitex sp.,10107,53,FALSE,RichterEtAl2017
-SHUB1,RTD-8903,,Vitex sp.,10095,52,FALSE,RichterEtAl2017
-SHUB1,RTD-8904,,Zilla sp.,10317,38,FALSE,RichterEtAl2017
-SHUB1,RTK-6814,,Tamarix sp.,10229,70,FALSE,RichterEtAl2017
-SHUB3,Poz-76086,,Fraxinus sp.,10170,50,FALSE,
-SHUB3,Poz-76088,,Tamarix sp.,10210,50,FALSE,
-SHUB3,Poz-76089,,Tamarix sp.,10090,50,FALSE,
-SHUB3,Poz-76090,,Tamarix sp.,10240,60,FALSE,
-SHUB6,Poz-76082,,Tamarix sp.,10050,50,FALSE,
-SHUB6,Poz-76082,,Tamarix sp.,10050,50,FALSE,
-SHUB6,Poz-76083,,Fraxinus sp. ,9500,50,FALSE,
-SHUB6,Poz-76085,wood,Fraxinus sp.,9440,50,FALSE,RichterEtAl2016;YeomansEtAl2019
-SHUB6,RTD-9338,charcoal,Vitex sp.,9922,42,FALSE,RichterEtAl2016;YeomansEtAl2019
-SHUB6,RTD-9341,charcoal,Salicaceae ,10035,43,FALSE,RichterEtAl2016;YeomansEtAl2019
-SHUB6,RTD-9342,seed,Hordeum spontaneum ,9962,42,FALSE,RichterEtAl2016;YeomansEtAl2019
-SHUB6,RTD-9343,wood,Vitex sp.,10072,43,FALSE,RichterEtAl2016;YeomansEtAl2019
-SHUB6,RTD-9650,,Tamarix sp.,9892,28,FALSE,
-SHUB6,RTD-9653,,Zilla spinosa,9995,29,FALSE,
-SHUB6,RTD-9655,tuber,Bolboschoenus sp.,9431,27,FALSE,
-SHUB6,RTD-9656,,Zilla spinosa,10126,28,FALSE,
-SHUB6,RTD-9657,,Fraxinus sp.,10242,29,FALSE,
-SHUB6,RTD-9658,,Bolboschoenus sp.,9425,27,FALSE,
-SHUB6,RTD-9659,tuber,Bolboschoenus sp.,9463,27,FALSE,
-SHUB6,RTD-9660,,Fraxinus sp.,9419,29,FALSE,
-SHUB6,RTD-9662,,Tamarix sp.,10087,28,FALSE,
-SHUB6,RTD-9663,,Fraxinus sp.,9549,28,FALSE,
-SHUB6,RTD-9664,,Vitex sp.,9598,27,FALSE,
-SHUB6,RTD-9665,,Tamarix sp.,9921,29,FALSE,
-SHUB6,RTD-9666,,Tamarix sp.,10240,29,FALSE,
-SHUB6,RTD-9667,,Tamarix sp.,10093,29,FALSE,
-SHUB6,RTK-7950,,Vitex agnus castus,10270,33,FALSE,
-SHUB6,RTK-7952,,Vitex agnus castus,10320,34,FALSE,
+site,lab_id,material,taxon,c14_age,c14_error,reference
+SHUB1,Beta-112146,dung,,12310,60,RichterEtAl2017
+SHUB1,RTD-7317,tuber,Bolboschoenus sp.,12289,46,RichterEtAl2017
+SHUB1,RTD-7318,wood charcoal,Zilla sp.,12332,46,RichterEtAl2017
+SHUB1,RTD-7948,tuber,Bolboschoenus sp.,12478,38,RichterEtAl2017
+SHUB1,RTD-7951,tuber,Bolboschoenus sp.,12166,55,RichterEtAl2017
+SHUB1,RTD-7311,,Vitex sp.,12367,65,RichterEtAl2017
+SHUB1,RTD-7312,,Zilla sp.,12405,50,RichterEtAl2017
+SHUB1,RTD-7313,,Bolboschoenus sp.,12346,46,RichterEtAl2017
+SHUB1,RTD-7314,,Bolboschoenus sp.,12273,48,RichterEtAl2017
+SHUB1,RTD-7315,,Bolboschoenus sp.,12445,70,RichterEtAl2017
+SHUB1,RTD-7316,,Zilla sp.,12337,46,RichterEtAl2017
+SHUB1,RTD-7947,,Bolboschoenus sp.,12322,38,RichterEtAl2017
+SHUB1,RTK-6818,,Fraxinus sp.,12477,76,RichterEtAl2017
+SHUB1,RTK-6820,,Bolboschoenus sp.,12385,75,RichterEtAl2017
+SHUB1,RTK-6821,,Hordeum spontaneum,12385,78,RichterEtAl2017
+SHUB1,RTK-6822,wood charcoal,Tamarix sp.,12412,79,RichterEtAl2017
+SHUB1,RTK-6823,wood charcoal,Tamarix sp.,12321,78,RichterEtAl2017
+SHUB1,RTK-6813,,Tamarix sp.,12344,85,RichterEtAl2017
+SHUB1,RTK-6816,,Tamarix sp.,12389,78,RichterEtAl2017
+SHUB1,RTK-6819,,Bolboschoenus sp.,11325,74,RichterEtAl2017
+SHUB1,RTK-6812,,Fraxinus sp.,11365,72,RichterEtAl2017
+SHUB1,RTK-6817,,Chenopodiaceae,11322,75,RichterEtAl2017
+SHUB1,RTD-8902,,Vitex sp.,10107,53,RichterEtAl2017
+SHUB1,RTD-8903,,Vitex sp.,10095,52,RichterEtAl2017
+SHUB1,RTD-8904,,Zilla sp.,10317,38,RichterEtAl2017
+SHUB1,RTK-6814,,Tamarix sp.,10229,70,RichterEtAl2017
+SHUB3,Poz-76086,,Fraxinus sp.,10170,50,
+SHUB3,Poz-76088,,Tamarix sp.,10210,50,
+SHUB3,Poz-76089,,Tamarix sp.,10090,50,
+SHUB3,Poz-76090,,Tamarix sp.,10240,60,
+SHUB6,Poz-76082,,Tamarix sp.,10050,50,
+SHUB6,Poz-76082,,Tamarix sp.,10050,50,
+SHUB6,Poz-76083,,Fraxinus sp. ,9500,50,
+SHUB6,Poz-76085,wood,Fraxinus sp.,9440,50,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9338,charcoal,Vitex sp.,9922,42,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9341,charcoal,Salicaceae ,10035,43,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9342,seed,Hordeum spontaneum ,9962,42,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9343,wood,Vitex sp.,10072,43,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9650,,Tamarix sp.,9892,28,
+SHUB6,RTD-9653,,Zilla spinosa,9995,29,
+SHUB6,RTD-9655,tuber,Bolboschoenus sp.,9431,27,
+SHUB6,RTD-9656,,Zilla spinosa,10126,28,
+SHUB6,RTD-9657,,Fraxinus sp.,10242,29,
+SHUB6,RTD-9658,,Bolboschoenus sp.,9425,27,
+SHUB6,RTD-9659,tuber,Bolboschoenus sp.,9463,27,
+SHUB6,RTD-9660,,Fraxinus sp.,9419,29,
+SHUB6,RTD-9662,,Tamarix sp.,10087,28,
+SHUB6,RTD-9663,,Fraxinus sp.,9549,28,
+SHUB6,RTD-9664,,Vitex sp.,9598,27,
+SHUB6,RTD-9665,,Tamarix sp.,9921,29,
+SHUB6,RTD-9666,,Tamarix sp.,10240,29,
+SHUB6,RTD-9667,,Tamarix sp.,10093,29,
+SHUB6,RTK-7950,,Vitex agnus castus,10270,33,
+SHUB6,RTK-7952,,Vitex agnus castus,10320,34,
