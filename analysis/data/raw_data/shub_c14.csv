@@ -1,63 +1,55 @@
-site,site_code,site_phase,lab_id,context,sample,material,taxon,c14_age,c14_error,outlier,reference
-Shubayqa 1,SHUB1,Phase 7,Beta-112146,C105,,dung,,12310,60,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 7,RTD-7317,C83,392,tuber,Bolboschoenus sp.,12289,46,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 7,RTD-7318,C86,399,wood charcoal,Zilla sp.,12332,46,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 7,RTD-7948,C120,455,tuber,Bolboschoenus sp.,12478,38,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 7,RTD-7951,C126,465,tuber,Bolboschoenus sp.,12166,55,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7311,C67,268,,Vitex sp.,12367,65,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7312,C67,289,,Zilla sp.,12405,50,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7313,C67,293,,Bolboschoenus sp.,12346,46,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7314,C67,294,,Bolboschoenus sp.,12273,48,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7315,C79,361,,Bolboschoenus sp.,12445,70,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7316,C79,384,,Zilla sp.,12337,46,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 6,RTD-7947,C166,430,,Bolboschoenus sp.,12322,38,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 5,RTK-6818,C43,76,,Fraxinus sp.,12477,76,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 5,RTK-6820,C49,70,,Bolboschoenus sp.,12385,75,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 5,RTK-6821,C50,77,,Hordeum spontaneum,12385,78,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 5,RTK-6822,C50,,wood charcoal,Tamarix sp.,12412,79,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 5,RTK-6823,C50,,wood charcoal,Tamarix sp.,12321,78,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 4,RTK-6813,C26,50,,Tamarix sp.,12344,85,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 4,RTK-6816,C32,42,,Tamarix sp.,12389,78,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 3,RTK-6819,C46,72,,Bolboschoenus sp.,11325,74,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 2,RTK-6812,C20,41,,Fraxinus sp.,11365,72,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 2,RTK-6817,C40,70,,Chenopodiaceae,11322,75,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 1,RTD-8902,C174,782,,Vitex sp.,10107,53,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 1,RTD-8903,C180,800,,Vitex sp.,10095,52,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 1,RTD-8904,C183,821,,Zilla sp.,10317,38,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 1,RTK-6814,C27,,,Tamarix sp.,10229,70,FALSE,RichterEtAl2017
-Shubayqa 1,SHUB1,Phase 1,RTK-6815,C27,,,Hordeum spontaneum,1229,54,TRUE,RichterEtAl2017
-Shubayqa 3,SHUB3,,Poz-76086,Stratum G,15.12,,Fraxinus sp.,10170,50,FALSE,
-Shubayqa 3,SHUB3,,Poz-76088,Stratum D,15.1,,Tamarix sp.,10210,50,FALSE,
-Shubayqa 3,SHUB3,,Poz-76089,Stratum E,15.14,,Tamarix sp.,10090,50,FALSE,
-Shubayqa 3,SHUB3,,Poz-76090,Stratum D,15.3,,Tamarix sp.,10240,60,FALSE,
-Shubayqa 6,SHUB6,,Poz-76082,C25,,,Tamarix sp.,10050,50,FALSE,
-Shubayqa 6,SHUB6,,Poz-76082,C25,15.203,,Tamarix sp.,10050,50,FALSE,
-Shubayqa 6,SHUB6,,Poz-76083,C75,15.X,,Fraxinus sp. ,9500,50,FALSE,
-Shubayqa 6,SHUB6,,Poz-76084,C68.2,,,Fraxinus sp. ,4945,35,TRUE,
-Shubayqa 6,SHUB6,,Poz-76084,C68.2,15.224,,Fraxinus sp. ,4945,35,TRUE,
-Shubayqa 6,SHUB6,,Poz-76085,C69,15.191,wood,Fraxinus sp.,9440,50,FALSE,RichterEtAl2016;YeomansEtAl2019
-Shubayqa 6,SHUB6,,RTD-9338,C76,,charcoal,Vitex sp.,9922,42,FALSE,RichterEtAl2016;YeomansEtAl2019
-Shubayqa 6,SHUB6,,RTD-9339,C94,,,Vitex sp.,1297,25,TRUE,
-Shubayqa 6,SHUB6,,RTD-9340,C122,,,Vitex sp.,4966,30,TRUE,
-Shubayqa 6,SHUB6,,RTD-9341,C250,,charcoal,Salicaceae ,10035,43,FALSE,RichterEtAl2016;YeomansEtAl2019
-Shubayqa 6,SHUB6,,RTD-9342,C256,,seed,Hordeum spontaneum ,9962,42,FALSE,RichterEtAl2016;YeomansEtAl2019
-Shubayqa 6,SHUB6,,RTD-9343,C264,,wood,Vitex sp.,10072,43,FALSE,RichterEtAl2016;YeomansEtAl2019
-Shubayqa 6,SHUB6,,RTD-9639,C260,,,Hordeum spontaneum/vulgare,1291,17,TRUE,
-Shubayqa 6,SHUB6,,RTD-9640,C249,,,Hordeum spontaneum/vulgare,1310,17,TRUE,
-Shubayqa 6,SHUB6,,RTD-9650,C146,,,Tamarix sp.,9892,28,FALSE,
-Shubayqa 6,SHUB6,,RTD-9653,C163,,,Zilla spinosa,9995,29,FALSE,
-Shubayqa 6,SHUB6,,RTD-9655,C216,,tuber,Bolboschoenus sp.,9431,27,FALSE,
-Shubayqa 6,SHUB6,,RTD-9656,C220,,,Zilla spinosa,10126,28,FALSE,
-Shubayqa 6,SHUB6,,RTD-9657,C220,,,Fraxinus sp.,10242,29,FALSE,
-Shubayqa 6,SHUB6,,RTD-9658,C229,,,Bolboschoenus sp.,9425,27,FALSE,
-Shubayqa 6,SHUB6,,RTD-9659,C232,,tuber,Bolboschoenus sp.,9463,27,FALSE,
-Shubayqa 6,SHUB6,,RTD-9660,C232,,,Fraxinus sp.,9419,29,FALSE,
-Shubayqa 6,SHUB6,,RTD-9662,C238,,,Tamarix sp.,10087,28,FALSE,
-Shubayqa 6,SHUB6,,RTD-9663,C246,,,Fraxinus sp.,9549,28,FALSE,
-Shubayqa 6,SHUB6,,RTD-9664,C246,,,Vitex sp.,9598,27,FALSE,
-Shubayqa 6,SHUB6,,RTD-9665,C264,,,Tamarix sp.,9921,29,FALSE,
-Shubayqa 6,SHUB6,,RTD-9666,C264,,,Tamarix sp.,10240,29,FALSE,
-Shubayqa 6,SHUB6,,RTD-9667,C264,,,Tamarix sp.,10093,29,FALSE,
-Shubayqa 6,SHUB6,,RTK-7950,C5,22,,Vitex agnus castus,10270,33,FALSE,
-Shubayqa 6,SHUB6,,RTK-7952,C5,32,,Vitex agnus castus,10320,34,FALSE,
-,,,,,,,,,,,
+site,lab_id,material,taxon,c14_age,c14_error,outlier,reference
+SHUB1,Beta-112146,dung,,12310,60,FALSE,RichterEtAl2017
+SHUB1,RTD-7317,tuber,Bolboschoenus sp.,12289,46,FALSE,RichterEtAl2017
+SHUB1,RTD-7318,wood charcoal,Zilla sp.,12332,46,FALSE,RichterEtAl2017
+SHUB1,RTD-7948,tuber,Bolboschoenus sp.,12478,38,FALSE,RichterEtAl2017
+SHUB1,RTD-7951,tuber,Bolboschoenus sp.,12166,55,FALSE,RichterEtAl2017
+SHUB1,RTD-7311,,Vitex sp.,12367,65,FALSE,RichterEtAl2017
+SHUB1,RTD-7312,,Zilla sp.,12405,50,FALSE,RichterEtAl2017
+SHUB1,RTD-7313,,Bolboschoenus sp.,12346,46,FALSE,RichterEtAl2017
+SHUB1,RTD-7314,,Bolboschoenus sp.,12273,48,FALSE,RichterEtAl2017
+SHUB1,RTD-7315,,Bolboschoenus sp.,12445,70,FALSE,RichterEtAl2017
+SHUB1,RTD-7316,,Zilla sp.,12337,46,FALSE,RichterEtAl2017
+SHUB1,RTD-7947,,Bolboschoenus sp.,12322,38,FALSE,RichterEtAl2017
+SHUB1,RTK-6818,,Fraxinus sp.,12477,76,FALSE,RichterEtAl2017
+SHUB1,RTK-6820,,Bolboschoenus sp.,12385,75,FALSE,RichterEtAl2017
+SHUB1,RTK-6821,,Hordeum spontaneum,12385,78,FALSE,RichterEtAl2017
+SHUB1,RTK-6822,wood charcoal,Tamarix sp.,12412,79,FALSE,RichterEtAl2017
+SHUB1,RTK-6823,wood charcoal,Tamarix sp.,12321,78,FALSE,RichterEtAl2017
+SHUB1,RTK-6813,,Tamarix sp.,12344,85,FALSE,RichterEtAl2017
+SHUB1,RTK-6816,,Tamarix sp.,12389,78,FALSE,RichterEtAl2017
+SHUB1,RTK-6819,,Bolboschoenus sp.,11325,74,FALSE,RichterEtAl2017
+SHUB1,RTK-6812,,Fraxinus sp.,11365,72,FALSE,RichterEtAl2017
+SHUB1,RTK-6817,,Chenopodiaceae,11322,75,FALSE,RichterEtAl2017
+SHUB1,RTD-8902,,Vitex sp.,10107,53,FALSE,RichterEtAl2017
+SHUB1,RTD-8903,,Vitex sp.,10095,52,FALSE,RichterEtAl2017
+SHUB1,RTD-8904,,Zilla sp.,10317,38,FALSE,RichterEtAl2017
+SHUB1,RTK-6814,,Tamarix sp.,10229,70,FALSE,RichterEtAl2017
+SHUB3,Poz-76086,,Fraxinus sp.,10170,50,FALSE,
+SHUB3,Poz-76088,,Tamarix sp.,10210,50,FALSE,
+SHUB3,Poz-76089,,Tamarix sp.,10090,50,FALSE,
+SHUB3,Poz-76090,,Tamarix sp.,10240,60,FALSE,
+SHUB6,Poz-76082,,Tamarix sp.,10050,50,FALSE,
+SHUB6,Poz-76082,,Tamarix sp.,10050,50,FALSE,
+SHUB6,Poz-76083,,Fraxinus sp. ,9500,50,FALSE,
+SHUB6,Poz-76085,wood,Fraxinus sp.,9440,50,FALSE,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9338,charcoal,Vitex sp.,9922,42,FALSE,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9341,charcoal,Salicaceae ,10035,43,FALSE,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9342,seed,Hordeum spontaneum ,9962,42,FALSE,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9343,wood,Vitex sp.,10072,43,FALSE,RichterEtAl2016;YeomansEtAl2019
+SHUB6,RTD-9650,,Tamarix sp.,9892,28,FALSE,
+SHUB6,RTD-9653,,Zilla spinosa,9995,29,FALSE,
+SHUB6,RTD-9655,tuber,Bolboschoenus sp.,9431,27,FALSE,
+SHUB6,RTD-9656,,Zilla spinosa,10126,28,FALSE,
+SHUB6,RTD-9657,,Fraxinus sp.,10242,29,FALSE,
+SHUB6,RTD-9658,,Bolboschoenus sp.,9425,27,FALSE,
+SHUB6,RTD-9659,tuber,Bolboschoenus sp.,9463,27,FALSE,
+SHUB6,RTD-9660,,Fraxinus sp.,9419,29,FALSE,
+SHUB6,RTD-9662,,Tamarix sp.,10087,28,FALSE,
+SHUB6,RTD-9663,,Fraxinus sp.,9549,28,FALSE,
+SHUB6,RTD-9664,,Vitex sp.,9598,27,FALSE,
+SHUB6,RTD-9665,,Tamarix sp.,9921,29,FALSE,
+SHUB6,RTD-9666,,Tamarix sp.,10240,29,FALSE,
+SHUB6,RTD-9667,,Tamarix sp.,10093,29,FALSE,
+SHUB6,RTK-7950,,Vitex agnus castus,10270,33,FALSE,
+SHUB6,RTK-7952,,Vitex agnus castus,10320,34,FALSE,
