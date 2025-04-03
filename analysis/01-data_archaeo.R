@@ -1,15 +1,21 @@
 # 01-data_archaeo.R
 # Define study region, period, etc. and import radiocarbon dataset
 
-# Study region and period
-late_epipal_neo <- yr(c(18000, 8000), "BP")
+# Study period
+climate_periods <- tibble::tribble(
+  ~period,              ~acronym, ~start,  ~end,
+  "Heinrich Stadial 1", "HS1",     17000, 14700,
+  "Bølling-Allerød",    "BA",      14700, 12900,
+  "Younger Dryas",      "YD",      12900, 11700,
+  "Early Holocene",     "EH",      11700,  8200,
+) |>
+  mutate(start = yr(start, "BP"), end = yr(end, "BP"))
 
 # Location of Shubayqa
 shub_location <- data.frame(
   name = c("Shubayqa"),
   longitude = 37.25,
-  latitude = 32.40,
-  time_bp = -seq(late_epipal_neo[1], late_epipal_neo[2], by = -100)
+  latitude = 32.40
 )
 
 # Radiocarbon dates from Shubayqa sites
