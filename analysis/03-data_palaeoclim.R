@@ -14,15 +14,14 @@ pastclim::set_data_path(derived_data("pastclim"),
 
 
 #
-# Annual mean annual temperature (BIO01) and total precipitation (BIO12)
-# TODO: replace point precipitation data with mean/sum over the Shubayqa basin
-#   (with region_series)
+# Annual mean annual temperature (BIO01) and total precipitation (BIO12) over
+# Shubayqa and precipitation over the Shubayqa basin
 # TODO: maybe don't bother with MAT, just calculate from monthly below?
 #
 annual_biovars <- c(temp_mean = "bio01", prec_mean = "bio12")
 download_dataset("CHELSA_trace21k_1.0_0.5m_vsi", annual_biovars) # TODO: check if necessary
 
-# Build dataset. Note: very slow if downloads are required!
+# Build datasets. Note: very slow if downloads are required!
 shub_climate <- location_series(
   shub_location, 
   # TODO: tidy up
@@ -31,7 +30,16 @@ shub_climate <- location_series(
   dataset = "CHELSA_trace21k_1.0_0.5m_vsi",
 )
 
-# TODO: cache shub_climate
+shubayqa_basin <- st_read(derived_data("basin.shp")) # generated in 03-data-palaeoclim.R
+shub_basin_climate <- region_series(
+  time_bp = palaeoclim_steps,
+  bio_variables = annual_biovars,
+  dataset = "CHELSA_trace21k_1.0_0.5m_vsi",
+  ext = ext(project(vect(shubayqa_basin), "epsg:4326")),
+  crop = project(vect(shubayqa_basin), "epsg:4326")
+)
+
+# TODO: cache shub_climate and shub_basin_climate
 
 
 #
@@ -66,6 +74,7 @@ if (!file_exists(derived_data("shub_climate_monthly.csv")) {
   # Cache
   write_csv(shub_climate_monthly, derived_data("shub_climate_monthly.csv"))
 }
+
 shub_climate_monthly <- read_csv(
   derived_data("shub_climate_monthly.csv"),
   col_types = cols(
@@ -75,3 +84,28 @@ shub_climate_monthly <- read_csv(
     value = col_double()
   )
 )
+
+# Comparison to Soreq
+soreq_location <- data.frame(
+  name = c("Soreq"),
+  longitude = 35.02,
+  latitude = 31.76
+)
+
+soreq_speleothem <- read_tsv(raw_data("soreq2012d18o-noaa.txt"), skip = 141) |>
+  transmute(
+    time_bp = -age_yrBP,
+    variable = "d18O",
+    value = d18O_VPDB,
+    error = d18O_VPDB_err
+  )
+
+soreq_climate <- location_series(
+  soreq_location, 
+  # TODO: tidy up
+  time_bp = palaeoclim_steps,
+  bio_variables = annual_biovars,
+  dataset = "CHELSA_trace21k_1.0_0.5m_vsi",
+) |>
+  pivot_longer(bio01:bio12, names_to = "variable") |>
+  bind_rows(soreq_speleothem)

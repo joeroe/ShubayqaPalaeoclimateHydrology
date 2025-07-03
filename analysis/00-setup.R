@@ -10,8 +10,12 @@ library("here")
 library("pastclim") # > v2.2.0, see https://github.com/EvolEcolGroup/pastclim/issues/66
 library("patchwork")
 library("readr")
+library("sf")
+library("SPEI")
+library("stars")
 library("stringr")
 library("tidyr")
+library("whitebox")
 
 # Define file paths for compendium
 raw_data <- function(...) {
