@@ -1,3 +1,6 @@
+# 04-hydro_model.R
+# Hydrological model for Shubayqa
+
 # Evaporation from the qa surface (after Linacre 1992; Jones et al. 2007)
 # Constants:
 shub_altitude <- 735
@@ -7,21 +10,31 @@ safawi_wind_speed <- c(3.45, 4.17, 4.64, 5.2, 4.89, 5.36, 5.15, 4.84, 3.97, 3.4,
 # Solar radiation (mean kWh/m2/day) at Ruwayshid estimated by Jibril 1990
 ruwayshed_solar_radiation <- c(6.2, 6.9, 7.6, 8.5, 10.1, 12.2, 12.4, 11.8, 10.7, 8.9, 7.3, 6)
 
+shub_evaporation <- function(
+  t_min, t_max, 
+  wind_speed = safawi_wind_speed,
+  latitude = shub_latitude,
+  solar_radiation = ruwayshed_solar_radiation,
+  altitude = shub_altitude
+) {
+  penman(
+    Tmin = t_min / 100,
+    Tmax = t_max / 100,
+    U2 = wind_speed,
+    lat = latitude,
+    Rs = solar_radiation * 3.6, # kWh to MJ
+    z = altitude,
+    crop = "short",
+    method = "ICID",
+    verbose = FALSE
+  )
+}
+
 # Model monthly evaporation and effective precipitation over Shubayqa
 shub_climate_monthly <- shub_climate_monthly |>
   pivot_wider(names_from = variable, values_from = value) |>
   mutate(
-    evaporation = penman(
-      Tmin = temperature_min / 100,
-      Tmax = temperature_max / 100,
-      U2 = safawi_wind_speed,
-      lat = shub_latitude,
-      Rs = ruwayshed_solar_radiation * 3.6, # kWh to MJ
-      z = shub_altitude,
-      crop = "short",
-      method = "ICID",
-      #verbose = FALSE
-    ),
+    evaporation = shub_evaporation(temperature_min, temperature_max),
     effective_precipitation = precipitation - evaporation,
     .by = time_bp
   ) |>
@@ -30,13 +43,13 @@ shub_climate_monthly <- shub_climate_monthly |>
 # Add mean values to annual palaeoclimatologies
 shub_climate <- shub_climate_monthly |>
   summarise(value = mean(value), .by = c(time_bp, variable)) |>
-  pivot_wider(names_from = variable, names_prefix = "mean", values_from = value) |>
+  pivot_wider(names_from = variable, names_prefix = "mean_", values_from = value) |>
   left_join(x = shub_climate, y = _, by = "time_bp")
 
 # Add sum values to annual palaeoclimatologies
 shub_climate <- shub_climate_monthly |>
   summarise(value = sum(value), .by = c(time_bp, variable)) |>
-  pivot_wider(names_from = variable, names_prefix = "sum", values_from = value) |>
+  pivot_wider(names_from = variable, names_prefix = "sum_", values_from = value) |>
   left_join(x = shub_climate, y = _, by = "time_bp")
 
 # Aggregate rainfall over Shubayqa basin
@@ -55,7 +68,7 @@ shub_climate <- shub_basin_climate$bio12 |>
 shub_climate <- shub_climate |>
   mutate(
     qa_inflow = basin_prec_sum * 1000,
-    qa_evap = (sumevaporation * as.numeric(st_area(shubayqa_qa))) / 1000,
+    qa_evap = (sum_evaporation * as.numeric(st_area(shubayqa_qa))) / 1000,
     qa_balance = qa_inflow - qa_evap
   )
 
