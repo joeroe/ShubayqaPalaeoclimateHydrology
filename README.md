@@ -1,5 +1,7 @@
 # Palaeoclimate and hydrological modelling of the Qa' Shubayqa, eastern Jordan
 
+[![DOI](https://zenodo.org/badge/321489935.svg)](https://doi.org/10.5281/zenodo.17482936)
+
 Joe Roe, University of Copenhagen <<jar@hum.ku.dk>>
 
 This research compendium contains the data and code for a model of the palaeoclimate and hydrology of the Qa' Shubayqa, a seasonal water body in eastern Jordan, between 17,000 and 8000 BP.
