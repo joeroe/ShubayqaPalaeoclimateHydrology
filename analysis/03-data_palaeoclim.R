@@ -50,7 +50,7 @@ shub_basin_climate <- region_series(
 monthly_biovars = get_vars_for_dataset("CHELSA_trace21k_1.0_0.5m_vsi", 
                                        annual = FALSE, monthly = TRUE)
 
-if (!file_exists(derived_data("shub_climate_monthly.csv")) {
+if (!file_exists(derived_data("shub_climate_monthly.csv"))) {
   # Fetch files to download
   download_dataset("CHELSA_trace21k_1.0_0.5m_vsi", annual = FALSE, monthly = TRUE) # TODO: check if necessary?
 

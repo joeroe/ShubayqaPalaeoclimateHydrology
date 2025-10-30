@@ -27,7 +27,6 @@ fig_shub_c14 <- ggplot(shub_c14) +
 
 # fig_soreq_climate: Simulated palaeoclimate at Soreq cave according to
 #   CHELSA-TraCE21k compared with the speleothem record
-
 fig_soreq_climate <- soreq_climate |>
   mutate(variable = case_match(
     variable,
@@ -41,6 +40,7 @@ fig_soreq_climate <- soreq_climate |>
   geom_ribbon(aes(ymin = value - error, ymax = value + error), alpha = 0.25) +
   geom_line() +
   scale_calbp() +
+  facetted_pos_scales(y = c(scale_y_continuous(), scale_y_continuous(), scale_y_reverse())) +
   labs(x = "cal BP", y = NULL) +
   theme_minimal_vgrid(font_size = 9)
 
@@ -90,7 +90,6 @@ ggsave(here("analysis", "figures", "fig_shub_min_k.png"), fig_shub_min_k,
        width = 80, height = 80, units = "mm")
 
 # fig_shub_hydro: Modelled palaeohydrology of the Shubayqa qa
-# TODO: cleanup axes
 fig_shub_hydro <- shub_climate |>
   pivot_longer(-c(name, longitude, latitude, time_bp), names_to = "variable") |>
   filter(variable %in% c("qa_inflow", "qa_evap", "min_a_prop")) |>
@@ -114,7 +113,6 @@ fig_shub_hydro <- shub_climate |>
   theme(axis.text.x = element_blank())
 
 # fig_shub_hydro_c14
-# TODO: add birds
 fig_shub_hydro_c14 <- fig_shub_hydro / fig_shub_c14 +
   plot_layout(heights = c(23, 1))
 
@@ -122,7 +120,7 @@ ggsave(here("analysis", "figures", "fig_shub_hydro.png"), fig_shub_hydro_c14,
        width = 190, height = 160, units = "mm")
 
 # fig_shub_climate_monthly: Monthly modelled precipitation and temperature
-rig_shub_climate_monthly <- shub_climate_monthly |>
+fig_shub_climate_monthly <- shub_climate_monthly |>
   pivot_wider(names_from = "variable") |>
   mutate(temperature = map2_dbl(temperature_min, temperature_max, mean) / 100) |>
   select(time_bp, month, temperature, precipitation) |> 

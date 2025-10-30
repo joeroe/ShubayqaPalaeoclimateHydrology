@@ -5,6 +5,7 @@ library("cowplot")
 library("dplyr")
 library("era")
 library("fs")
+library("ggh4x")
 library("ggplot2")
 library("here")
 library("pastclim") # > v2.2.0, see https://github.com/EvolEcolGroup/pastclim/issues/66
