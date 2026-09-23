@@ -10,6 +10,7 @@ library("ggplot2")
 library("here")
 library("pastclim") # > v2.2.0, see https://github.com/EvolEcolGroup/pastclim/issues/66
 library("patchwork")
+library("purrr")
 library("readr")
 library("sf")
 library("SPEI")

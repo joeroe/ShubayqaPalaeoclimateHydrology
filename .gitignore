@@ -1,4 +1,5 @@
-analysis/data/derived_data
+analysis/data/derived_data/nasadem_badia*
+analysis/data/derived_data/pastclim/
 .Rproj.user
 .Rhistory
 .RData

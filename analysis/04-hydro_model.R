@@ -72,3 +72,5 @@ shub_climate <- shub_climate |>
     qa_balance = qa_inflow - qa_evap
   )
 
+# Cache model
+write_csv(shub_climate, "analysis/data/derived_data/shub_climate.csv")

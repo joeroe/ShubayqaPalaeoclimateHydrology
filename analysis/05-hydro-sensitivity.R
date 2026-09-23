@@ -41,3 +41,6 @@ shub_climate <- shub_climate |>
     min_a = pmap_dbl(list(k = 0.05, r = qa_inflow, e = sum_evaporation), water_balance_min_a),
     min_a_prop = min_a / as.numeric(st_area(shubayqa_qa))
   )
+
+# Cache model
+write_csv(shub_climate, "analysis/data/derived_data/shub_climate.csv")
