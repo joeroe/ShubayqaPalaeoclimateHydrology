@@ -1,11 +1,6 @@
 # 06-figures.R
 # Generate figures for paper
 
-# TODO:
-# - [ ] Location map
-# - [ ] Comparison of modelled prec/temp with regional palaeoclimate proxies
-# - [ ] Prec. seasonality through time
-
 # Define custom scales
 scale_calbp <- function() {
   scale_x_reverse(limits = c(17000, 8200), breaks = scales::breaks_width(1000))
@@ -14,7 +9,7 @@ scale_calbp <- function() {
 # fig_shub_c14: Barcode plot of radiocarbon dates from SHUB1, SHUB3, and SHUB6 
 #   (for incorporation into other figures)
 fig_shub_c14 <- ggplot(shub_c14) +
-  geom_vline(aes(xintercept = cal_point(cal, quiet = TRUE), colour = site)) +
+  geom_vline(aes(xintercept = cal_mode(cal, quiet = TRUE), colour = site)) +
   scale_calbp() +
   scale_colour_brewer(palette = "Set1") +
   #labs(x = "cal BP", y = bquote(~C^14)) +
@@ -47,9 +42,12 @@ fig_soreq_climate <- soreq_climate |>
 ggsave(here("analysis", "figures", "fig_soreq_climate.png"), fig_soreq_climate,
        width = 190, height = 120, units = "mm")
 
+ggsave(here("analysis", "figures", "fig_soreq_climate.eps"), fig_soreq_climate,
+       device = grDevices::cairo_ps,
+       width = 190, height = 120, units = "mm")
+
 # fig_shub_climate: Simulated temperature at Shubayqa and precipitation over the
 #   Shubayqa basin
-# TODO: Add hot/cold desert line
 fig_shub_climate <- shub_climate |>
   pivot_longer(bio01:basin_prec_sum, names_to = "variable") |>
   filter(variable %in% c("bio01", "basin_prec_mean")) |>
@@ -67,6 +65,10 @@ fig_shub_climate <- shub_climate |>
   theme_minimal_vgrid(font_size = 9)
 
 ggsave(here("analysis", "figures", "fig_shub_climate.png"), fig_shub_climate,
+       width = 190, height = 80, units = "mm")
+
+ggsave(here("analysis", "figures", "fig_shub_climate.eps"), fig_shub_climate,
+       device = grDevices::cairo_ps,
        width = 190, height = 80, units = "mm")
 
 # fig_shub_min_k: sensitivity analysis of min(k) over a
@@ -89,6 +91,10 @@ fig_shub_min_k <- ggplot(shub_min_k, aes(x = area_coef, y = min_k, group = sum_e
 ggsave(here("analysis", "figures", "fig_shub_min_k.png"), fig_shub_min_k,
        width = 80, height = 80, units = "mm")
 
+ggsave(here("analysis", "figures", "fig_shub_min_k.eps"), fig_shub_min_k,
+       device = grDevices::cairo_ps,
+       width = 80, height = 80, units = "mm")
+
 # fig_shub_hydro: Modelled palaeohydrology of the Shubayqa qa
 fig_shub_hydro <- shub_climate |>
   pivot_longer(-c(name, longitude, latitude, time_bp), names_to = "variable") |>
@@ -108,6 +114,7 @@ fig_shub_hydro <- shub_climate |>
   facet_wrap(vars(variable), scales = "free_y", ncol = 1, strip.position = "right") +
   geom_line() +
   scale_calbp() +
+  scale_y_continuous(labels = scales::label_number()) +
   labs(x = NULL, y = NULL) +
   theme_minimal_vgrid(font_size = 9) +
   theme(axis.text.x = element_blank())
@@ -117,6 +124,10 @@ fig_shub_hydro_c14 <- fig_shub_hydro / fig_shub_c14 +
   plot_layout(heights = c(23, 1))
 
 ggsave(here("analysis", "figures", "fig_shub_hydro.png"), fig_shub_hydro_c14,
+       width = 190, height = 160, units = "mm")
+
+ggsave(here("analysis", "figures", "fig_shub_hydro.eps"), fig_shub_hydro_c14,
+       device = grDevices::cairo_ps,
        width = 190, height = 160, units = "mm")
 
 # fig_shub_climate_monthly: Monthly modelled precipitation and temperature
@@ -136,10 +147,14 @@ fig_shub_climate_monthly <- shub_climate_monthly |>
   ggplot(aes(month, value, group = time_bp)) +
   coord_polar() +
   facet_wrap(vars(variable), ncol = 1, scales = "free_y", strip.position = "right") +
-  geom_line(alpha = 0.1) +
+  geom_line(linewidth = 0.05) +
   scale_x_discrete() +
   labs(x = NULL, y = NULL) +
   theme_minimal_grid(font_size = 9)
 
 ggsave(here("analysis", "figures", "fig_shub_climate_monthly.png"), 
+       fig_shub_climate_monthly, width = 80, height = 160, units = "mm")
+
+ggsave(here("analysis", "figures", "fig_shub_climate_monthly.eps"),
+       device = grDevices::cairo_ps,
        fig_shub_climate_monthly, width = 80, height = 160, units = "mm")
